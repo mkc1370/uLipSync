@@ -1,10 +1,13 @@
 using UnityEditor;
-using UnityEditorInternal;
 using System.Linq;
+#if USE_VRM10
 using UniVRM10;
+#endif
 
 namespace uLipSync
 {
+
+#if USE_VRM10
 
 [CustomEditor(typeof(uLipSyncExpressionVRM))]
 public class uLipSyncExpressionVRMEditor : uLipSyncBlendShapeEditor
@@ -20,7 +23,7 @@ public class uLipSyncExpressionVRMEditor : uLipSyncBlendShapeEditor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        
+
         if (EditorUtil.Foldout("LipSync Update Method", true))
         {
             ++EditorGUI.indentLevel;
@@ -55,5 +58,18 @@ public class uLipSyncExpressionVRMEditor : uLipSyncBlendShapeEditor
         return vrm10Instance.Vrm.Expression.Clips.Select(x => x.Clip.name).ToArray();
     }
 }
+
+#else
+
+[CustomEditor(typeof(uLipSyncExpressionVRM))]
+public class uLipSyncExpressionVRMEditor : uLipSyncBlendShapeEditor
+{
+    public override void OnInspectorGUI()
+    {
+        EditorGUILayout.HelpBox("Please import VRM 1.0 package to use this component.", MessageType.Warning);
+    }
+}
+
+#endif
 
 }
